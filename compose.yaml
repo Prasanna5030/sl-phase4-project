@@ -1,0 +1,35 @@
+  version: '3'
+  services:
+
+    # The app service definition
+    mysqldb:
+      image: mysql
+      container_name: mysqldb
+      volumes:
+        - mysql-data:/var/lib/mysql
+      ports:
+        - 3307:3306
+      environment:
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_DATABASE: spring_docker
+      restart: unless-stopped
+
+    phase4-project:
+      image: phase4-project:1.0
+      container_name: phase4-project
+      ports:
+        - 9000:8080
+      depends_on:
+        - mysqldb
+      restart: on-failure
+      volumes:
+        - .m2:/root/.m2
+      stdin_open: true
+      tty: true
+
+
+  volumes:
+    mysql-data:
+
+
+
